@@ -1,0 +1,12 @@
+Regla 1:
+	Las entidades se convierten en tablas.
+	Los atributos son los campos de cada tabla.
+Regla 2:
+	Para las relaciones con cardinalidad:
+		-Cardinalidad 1:1 ----> Ponemos el ID de uno en el otro, no importando el orden.
+Regla 3:
+	Para las relaciones con cardinalidad:
+		-Cardinalidad 1:N ----> Ponemos el ID de la tabla con cardinalidad 1 en la tabla N.
+Regla 4:
+	Para las relaciones con cardinalidad:
+		-Cardinalidad N:N ----> Creamos una tabla donde, AL MENOS, la clave principal sea cada una de las claves N.

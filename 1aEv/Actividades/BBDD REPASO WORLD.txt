@@ -1,0 +1,178 @@
+1.
+
+SELECT 
+	c.Name, c.LifeExpectancy
+FROM 
+	country AS c
+ORDER BY
+	c.LifeExpectancy DESC, c.Name
+
+2.
+
+SELECT 
+	c.Continent
+FROM 
+	country AS c
+GROUP BY
+	c.Continent;
+
+3.
+
+SELECT 
+	c.Continent, COUNT(c.Code) AS PAISES
+FROM 
+	country AS c
+GROUP BY
+	c.Continent;
+
+4.
+
+SELECT 
+	c.Name, COUNT(cl.CountryCode) AS IDIOMAS
+FROM 
+	country AS c,
+    countrylanguage as cl
+WHERE
+	cl.CountryCode = c.Code
+GROUP BY
+	c.Name;
+
+5.
+
+SELECT 
+	c.Continent, c.SurfaceArea
+FROM 
+	country AS c
+GROUP BY
+	c.Continent;
+
+6.
+
+SELECT
+	c.Name, c.GovernmentForm
+FROM 
+	country AS c
+WHERE 
+	c.GovernmentForm LIKE '%Republic%' OR '%Monarchy%'
+ORDER BY
+	c.Name;
+
+7.
+
+SELECT
+	c.Name, cl.Language
+FROM
+    country AS c,
+    countrylanguage AS cl
+WHERE
+	c.Code = cl.CountryCode AND
+    (cl.Language = 'SPANISH' OR cl.Language = 'BASQUE')
+ORDER BY
+	c.Name;
+
+---------------------------------------------------------------
+
+SELECT
+	c.Name, cl.Language
+FROM
+    country AS c,
+    countrylanguage AS cl
+WHERE
+	c.Code = cl.CountryCode AND
+    cl.Language IN ('SPANISH','BASQUE')
+ORDER BY
+	c.Name
+
+8.
+
+SELECT
+	c.Name, cl.Language
+FROM
+    country AS c,
+    countrylanguage AS cl
+WHERE
+	c.Code = cl.CountryCode AND
+    cl.Language NOT IN ('SPANISH')
+ORDER BY
+	c.Name;
+
+--------------------------------------
+
+SELECT
+	c.Name, cl.Language
+FROM
+    country AS c,
+    countrylanguage AS cl
+WHERE
+	c.Code = cl.CountryCode AND
+    cl.Language <> 'SPANISH'
+ORDER BY
+	c.Name;
+
+9.
+
+SELECT
+	ci.Name,ci.Population
+FROM
+	city AS ci
+ORDER BY
+	ci.Population DESC, ci.Name
+LIMIT 20;
+
+10.
+
+SELECT
+	c.Name, c.Population
+FROM
+	country AS c
+ORDER BY
+	c.Population DESC, c.Name;
+
+11.
+
+SELECT
+	ci.Name
+FROM
+	country AS c,
+    	city AS ci,
+    	countrylanguage AS cl
+WHERE
+	c.Code = cl.CountryCode AND
+    	ci.CountryCode = c.Code AND
+    cl.Language = 'SPANISH'
+ORDER BY
+	ci.Name;
+
+12.
+
+SELECT
+	c.Region, 
+    AVG(c.LifeExpectancy) AS EXPECTATIVA_VIDA_MEDIA
+FROM
+	country AS c
+GROUP BY
+	c.Region
+ORDER BY
+	EXPECTATIVA_VIDA_MEDIA  ASC;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

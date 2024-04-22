@@ -1,0 +1,79 @@
+1)
+SELECT c.cli_poblacion, c.cli_empresa
+FROM clientes as c
+ORDER BY c.cli_poblacion, c.cli_empresa
+
+2)
+SELECT p.prod_nombre, p.prod_fecha
+FROM productos as p
+WHERE p.prod_fecha LIKE '2001%'
+ORDER BY p.prod_nombre DESC
+
+3)
+SELECT p.prod_nombre, p.prod_precio
+FROM productos as p
+WHERE p.prod_precio > 100 AND p.prod_precio < 1000
+
+4)
+SELECT p.prod_nombre, p.prod_seccion
+FROM productos as p
+WHERE p.prod_seccion LIKE 'CER%' OR p.prod_seccion LIKE 'DEP%'
+ORDER BY p.prod_seccion
+
+5)
+SELECT c.cli_empresa, c.cli_poblacion
+FROM clientes as c
+WHERE c.cli_poblacion LIKE 'MADRID' OR c.cli_poblacion LIKE 'BARCELONA'
+ORDER BY c.cli_poblacion, c.cli_empresa
+
+6)
+SELECT p.prod_nombre, p.prod_precio, p.prod_pais_origen
+FROM productos AS p
+ORDER BY p.prod_precio DESC
+LIMIT 10
+
+7)
+SELECT 
+	p.prod_seccion, 
+    COUNT(p.prod_codigo) AS 'Cuantos', 
+    AVG(p.prod_precio) AS 'Precio medio',
+    MAX(p.prod_precio) AS 'Precio máximo',
+    MIN(p.prod_precio) AS 'Precio mínimo'
+FROM productos AS p
+GROUP BY p.prod_seccion
+
+8)
+SELECT p.prod_pais_origen, pd.pedd_unidades
+FROM 
+	productos as p, 
+    pedidos_detalle as pd
+WHERE 
+	p.prod_codigo = pd.pedd_prod_codigo AND
+    pd.pedd_unidades > 2
+
+9)
+SELECT pd.pedd_unidades AS 'Unidades', c.cli_poblacion as 'Población'
+FROM 
+	clientes as c, 
+    pedidos as p, 
+    pedidos_detalle as pd
+WHERE
+	c.cli_codigo = p.ped_cli_codigo AND
+    p.ped_numero = pd.pedd_ped_numero
+GROUP BY c.cli_poblacion
+
+10)
+SELECT
+	p.ped_numero AS 'Número de pedido',
+    pr.prod_nombre AS 'Nombre',
+    pd.pedd_unidades AS 'Unidades',
+    pr.prod_precio AS 'Precio unitario',
+    ( pd.pedd_unidades*pr.prod_precio) AS 'Importe'
+FROM 
+	pedidos AS p, 
+    productos as pr, 
+    pedidos_detalle as pd 
+WHERE
+	p.ped_numero = pd.pedd_ped_numero AND
+    pd.pedd_prod_codigo = pr.prod_codigo AND
+    p.ped_numero = 8
