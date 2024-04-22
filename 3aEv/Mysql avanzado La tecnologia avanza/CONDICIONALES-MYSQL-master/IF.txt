@@ -1,0 +1,176 @@
+Ejercicio 1 : 
+-------------
+Una empresa registra los datos de sus empleados en una tabla llamada "empleados".
+
+1- Elimine la tabla "empleados" si existe:
+ drop table if exists empleados;
+
+2- Cree la tabla:
+ create table empleados(
+  documento char(8) not null,
+  nombre varchar(30) not null,
+  sexo char(1),
+  domicilio varchar(30),
+  fechaingreso date,
+  fechanacimiento date,
+  sueldobasico decimal(5,2) unsigned,
+  hijos tinyint unsigned,
+  primary key(documento)
+);
+
+3- Ingrese algunos registros:
+ insert into empleados 
+(documento,nombre,sexo,domicilio,fechaingreso,fechanacimiento,sueldobasico,hijos)
+  values ('22333111','Juan Perez','m','Colon 123','1990-02-01','1970-05-10',550,0);
+ insert into empleados 
+(documento,nombre,sexo,domicilio,fechaingreso,fechanacimiento,sueldobasico,hijos)
+  values ('25444444','Susana Morales','f','Avellaneda 345','1995-04-01','1975-11-06',650,2);
+ insert into empleados 
+(documento,nombre,sexo,domicilio,fechaingreso,fechanacimiento,sueldobasico,hijos)
+  values ('20111222','Hector Pereyra','m','Caseros 987','1995-04-01','1965-03-25',510,1);
+ insert into empleados 
+(documento,nombre,sexo,domicilio,fechaingreso,fechanacimiento,sueldobasico,hijos)
+  values ('30000222','Luis LUque','m','Urquiza 456','1980-09-01','1980-03-29',700,3);
+ insert into empleados 
+(documento,nombre,sexo,domicilio,fechaingreso,fechanacimiento,sueldobasico,hijos)
+  values ('20555444','Maria Laura Torres','f','San Martin 1122','2000-05-15','1965-12-22',400,3);
+ insert into empleados 
+(documento,nombre,sexo,domicilio,fechaingreso,fechanacimiento,sueldobasico,hijos)
+  values ('30000234','Alberto Soto','m','Peru 232','2003-08-15','1989-10-10',420,1);
+ insert into empleados 
+(documento,nombre,sexo,domicilio,fechaingreso,fechanacimiento,sueldobasico,hijos)
+  values ('20125478','Ana Gomez','f','Sarmiento 975','2004-06-14','1976-09-21',350,2);
+ insert into empleados 
+(documento,nombre,sexo,domicilio,fechaingreso,fechanacimiento,sueldobasico,hijos)
+  values ('24154269','Ofelia Garcia','f','Triunvirato 628','2004-09-23','1974-05-12',390,0);
+ insert into empleados 
+(documento,nombre,sexo,domicilio,fechaIngreso,fechaNacimiento,sueldoBasico,hijos)
+  values ('30419964','Oscar Torres','m','Hernandez 1234','1996-04-10','1978-05-02',400,0);
+
+4- Es política de la empresa festejar cada fin de mes, los cumpleaños de todos los empleados que 
+cumplen ese mes. Si los empleados son de sexo femenino, se les regala un ramo de rosas, si son de 
+sexo masculino, una corbata. La secretaria de la Gerencia necesita saber cuántos ramos de rosas y 
+cuántas corbatas debe comprar para el mes de mayo:
+ select sexo,count(sexo),
+  if (sexo='f','rosas','corbata') as 'Obsequio'
+  from empleados
+  where month(fechanacimiento)=5
+  group by sexo;
+
+5- Además, si el empleado cumple 10,20,30,40... años de servicio, se le regala una placa 
+recordatoria. La secretaria de Gerencia necesita saber la cantidad de años de servicio que cumplen 
+los empleados que ingresaron en el mes de abril para encargar dichas placas:
+ select nombre,fechaingreso,
+  year(current_date)-year(fechaingreso) as 'Años de servicio',
+  if ( (year(current_date)-year(fechaingreso)) %10=0,'Si','No') as 'Placa'
+  from empleados
+  where month(fechaingreso)=4;
+
+6- La empresa paga un sueldo adicional por hijos a cargos. para un sueldo básico menor o igual a 
+$500 el salario familiar por hijo es de $300, para un sueldo superior, el monto es de $150 por 
+hijo. Muestre el nombre del empleado, el sueldo básico, la cantidad de hijos a cargo, el valor del 
+salario por hijo, el valor total del salario familiar y el sueldo final con el salario familiar 
+incluido de todos los empleados con hijos a cargo:
+ select nombre,sueldobasico,hijos,
+  if (sueldobasico<=500,300,150) as salarioporhijo,
+  if (sueldobasico<=500,300*hijos,150*hijos) as salariofamiliar,
+  if (sueldobasico<=500,sueldobasico+(300*hijos),sueldobasico+(150*hijos)) as total
+  from empleados
+  where hijos>0;
+
+Ejercicio 2 : 
+------------- 
+Una playa de estacionamiento guarda cada día los datos de los vehículos que ingresan a la playa 
+en una tabla llamada "vehiculos".
+
+1- Elimine la tabla, si existe.
+
+2- Cree la tabla:
+ create table vehiculos(
+  patente char(6) not null,
+  tipo char(4),
+  horallegada time not null,
+  horasalida time,
+  primary key(patente,horallegada)
+ );
+
+3- Ingrese algunos registros:
+ insert into vehiculos (patente,tipo,horallegada,horasalida)
+  values('ACD123','auto','8:30','9:40');
+ insert into vehiculos (patente,tipo,horallegada,horasalida)
+  values('AKL098','auto','8:45','15:10');
+ insert into vehiculos (patente,tipo,horallegada,horasalida)
+  values('HGF123','auto','9:30','18:40');
+ insert into vehiculos (patente,tipo,horallegada,horasalida)
+  values('DRT123','auto','15:30',null);
+ insert into vehiculos (patente,tipo,horallegada,horasalida)
+  values('FRT545','moto','19:45',null);
+ insert into vehiculos (patente,tipo,horallegada,horasalida)
+  values('GTY154','auto','20:30','21:00');
+
+4- Muestre la patente, la hora de llegada y de salida de todos los vehículos, más una columna que 
+calcule la cantidad de horas que estuvo cada vehículo en la playa, sin considerar los que aún no se 
+retiraron de la playa:
+ select patente,horallegada,horasalida,
+  left(timediff(horasalida,horallegada),5) as horasminutos
+  from vehiculos
+  where horasalida is not null;
+
+5- Se cobra 1 peso por hora. Pero si un vehículo permanece en la playa 4 horas, se le cobran 3 
+pesos, es decir, no se le cobra la cuarta hora; si está 8 horas, se cobran 6 pesos, y así 
+sucesivamente. Muestre la patente, la hora de llegada y de salida de todos los vehículos, más la 
+columna que calcule la cantidad de horas que estuvo cada vehículo en la playa (sin considerar los 
+que aún no se retiraron de la playa) y otra columna utilizando "if" que muestre la cantidad de 
+horas gratis:
+
+ select patente,horallegada,horasalida,
+  left(timediff(horasalida,horallegada),5) as horasminutos,
+  if (hour(timediff(horasalida,horallegada))>4,
+  hour(timediff(horasalida,horallegada)) div 4,0) as horagratis
+  from vehiculos
+  where horasalida is not null;
+
+timediff(hora1,hora2): retorna la cantidad de horas, minutos y segundos entre hora1 y hora2.
+SELECT LEFT("SQL Tutorial", 3) AS ExtractString;
+SELECT CURRENT_DATE() : DEVUELVE LA FECHA DE HOY
+
+
+
+Ejercicio 3 : 
+------------
+Un teatro con varias salas guarda la información de las entradas vendidas en una tabla 
+llamada "entradas".
+
+1- Elimine la tabla, si existe.
+
+2- Cree la tabla:
+ create table entradas(
+  sala tinyint unsigned,
+  fecha date,
+  hora time,
+  capacidad smallint unsigned,
+  entradasvendidas smallint unsigned,
+  primary key(sala,fecha,hora)
+ );
+
+3- Ingrese algunos registros:
+ insert into entradas values(1,'2006-05-10','20:00',300,50);
+ insert into entradas values(1,'2006-05-10','23:00',300,250);
+ insert into entradas values(2,'2006-05-10','20:00',400,350);
+ insert into entradas values(2,'2006-05-11','20:00',400,380);
+ insert into entradas values(2,'2006-05-11','23:00',400,400);
+ insert into entradas values(3,'2006-05-12','20:00',350,350);
+ insert into entradas values(3,'2006-05-12','22:30',350,100);
+ insert into entradas values(4,'2006-05-12','20:00',250,0);
+
+4- Muestre todos los registros y un mensaje si las entradas para una función están agotadas:
+ select sala,fecha,hora,
+  if (capacidad=entradasvendidas,'sala llena',capacidad-entradasvendidas) as 'Entradas disponibles'
+  from entradas;
+
+5- Muestre todos los datos de las funciones que tienen vendidad entradas y muestre un mensaje si se 
+vendió más o menos de la mitad de la capacidad de la sala:
+ select *,
+  if (entradasvendidas>(capacidad div 2),'mas de la mitad','menos de la mitad vendidas') as vendidas
+  from entradas
+  where entradasvendidas>0;

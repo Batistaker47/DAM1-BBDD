@@ -1,0 +1,9 @@
+Los usuarios no registrados pueden leer los foros pero no comentarlos
+
+Los foros se agrupan por temas
+
+Un usuario identificado puede borrar sus mensajes
+
+Cada usuario identificado tiene una foto
+
+Los usuarios administradores podrán crear o borrar temas, así como cualquier mensaje de cualquier usuario
