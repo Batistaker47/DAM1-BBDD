@@ -87,4 +87,5 @@ delimiter $$
 	end $$
     delimiter ;
     
-
+CALL cta_insertar ("333","David");
+SELECT * FROM cuentas;
