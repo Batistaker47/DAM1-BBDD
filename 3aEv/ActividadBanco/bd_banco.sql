@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 23-04-2024 a las 10:22:31
+-- Tiempo de generación: 23-04-2024 a las 12:42:05
 -- Versión del servidor: 10.4.11-MariaDB
 -- Versión de PHP: 7.4.2
 
@@ -135,8 +135,8 @@ CREATE TABLE `cuentas` (
 --
 
 INSERT INTO `cuentas` (`c_num_cta`, `c_nif`, `c_titular`, `c_fecha_creacion`, `c_saldo`) VALUES
-(0000000003, '05455317Q', 'David Pires Manzanares', '2024-04-23', '500.00'),
-(0000000004, '33529487A', 'Alex Álvarez de Sotomayor', '2024-04-23', '1600.00');
+(0000000003, '05455317Q', 'David Pires Manzanares', '2024-04-23', '1500.00'),
+(0000000004, '33529487A', 'Alex Álvarez de Sotomayor', '2024-04-23', '0.00');
 
 -- --------------------------------------------------------
 
@@ -147,7 +147,7 @@ INSERT INTO `cuentas` (`c_num_cta`, `c_nif`, `c_titular`, `c_fecha_creacion`, `c
 CREATE TABLE `movimientos` (
   `m_id` int(11) NOT NULL,
   `m_c_num_cta` int(10) UNSIGNED ZEROFILL NOT NULL,
-  `m_fecha` datetime NOT NULL,
+  `m_fecha` date NOT NULL DEFAULT current_timestamp(),
   `m_importe` decimal(10,2) DEFAULT NULL,
   `m_concepto` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -157,9 +157,7 @@ CREATE TABLE `movimientos` (
 --
 
 INSERT INTO `movimientos` (`m_id`, `m_c_num_cta`, `m_fecha`, `m_importe`, `m_concepto`) VALUES
-(1, 0000000003, '2024-04-23 00:00:00', '100.00', 'INGRESO'),
-(2, 0000000003, '2024-04-23 00:00:00', '400.00', 'INGRESO'),
-(3, 0000000004, '2024-04-23 00:00:00', '1600.00', 'MODIFICACION');
+(6, 0000000003, '2024-04-23', '1500.00', '\"NÓMINA\"');
 
 --
 -- Disparadores `movimientos`
@@ -217,7 +215,7 @@ ALTER TABLE `cuentas`
 -- AUTO_INCREMENT de la tabla `movimientos`
 --
 ALTER TABLE `movimientos`
-  MODIFY `m_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `m_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Restricciones para tablas volcadas
