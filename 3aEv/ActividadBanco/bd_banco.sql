@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-04-2024 a las 13:16:41
--- Versión del servidor: 10.4.28-MariaDB
--- Versión de PHP: 8.2.4
+-- Tiempo de generación: 24-04-2024 a las 16:37:46
+-- Versión del servidor: 10.4.32-MariaDB
+-- Versión de PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -134,7 +134,7 @@ CREATE TABLE `cuentas` (
 
 INSERT INTO `cuentas` (`c_num_cta`, `c_nif`, `c_titular`, `c_fecha_creacion`, `c_saldo`) VALUES
 (0000000003, '05455317Q', 'David Pires Manzanares', '2024-04-23', 1600.00),
-(0000000004, '33529487A', 'Alex Álvarez de Sotomayor', '2024-04-23', 0.00),
+(0000000004, '33529487A', 'Alex Álvarez de Sotomayor', '2024-04-23', 1150.00),
 (0000000005, '33529473G', 'Lucía Sánchez', '2024-04-24', 2600.00),
 (0000000006, '98765432J', 'Javier Ruiz Toledo', '2024-04-24', 5000.00),
 (0000000007, '45987436R', 'Gonzalo Sánchez', '2024-04-24', 0.00);
@@ -162,7 +162,9 @@ INSERT INTO `movimientos` (`m_id`, `m_c_num_cta`, `m_fecha`, `m_importe`, `m_con
 (10, 0000000003, '2024-04-24', 200.00, 'PENSION'),
 (11, 0000000005, '2024-04-24', 2600.00, 'NÓMINA ACCENTUR'),
 (12, 0000000003, '2024-04-24', -100.00, '\"GAME\"'),
-(13, 0000000006, '2024-04-24', 5000.00, '\"PENSIÓN JUBILACIÓN\"');
+(13, 0000000006, '2024-04-24', 5000.00, '\"PENSIÓN JUBILACIÓN\"'),
+(16, 0000000004, '2024-04-24', 1500.00, 'NÓMINA'),
+(17, 0000000004, '2024-04-24', -350.00, 'IFP');
 
 --
 -- Disparadores `movimientos`
@@ -220,7 +222,7 @@ ALTER TABLE `cuentas`
 -- AUTO_INCREMENT de la tabla `movimientos`
 --
 ALTER TABLE `movimientos`
-  MODIFY `m_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `m_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- Restricciones para tablas volcadas
