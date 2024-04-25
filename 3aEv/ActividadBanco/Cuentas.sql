@@ -18,7 +18,7 @@ delimiter $$
 
 -- 2) FILTRADO POR ID
     
-drop procedure if exists cta_por_id;
+drop procedure if exists cta_por_cta;
 delimiter $$
   create procedure cta_por_id(in _id int)
 	begin
@@ -42,12 +42,11 @@ delimiter $$
     
 drop procedure if exists cta_modificar;
 delimiter $$
-create procedure cta_modificar(in _nif varchar(9), in _titular varchar(50), in _fecha date, in _id int)
+create procedure cta_modificar(in _nif varchar(9), in _titular varchar(50), in _id int)
     begin
 		UPDATE cuentas SET
         c_nif = _nif,
-        c_titular = _titular,
-        c_fecha_creacion = _fecha
+        c_titular = _titular
         WHERE 
         c_num_cta = _id;
     end $$
