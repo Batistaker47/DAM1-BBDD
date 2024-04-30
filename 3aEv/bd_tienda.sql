@@ -1,8 +1,8 @@
-DROP DATABASE IF EXISTS tienda;
+DROP DATABASE IF EXISTS bd_tienda;
 
-CREATE DATABASE tienda;
+CREATE DATABASE bd_tienda;
 
-USE tienda;
+USE bd_tienda;
 
 DROP TABLE IF EXISTS compra_producto;
 DROP TABLE IF EXISTS producto;
