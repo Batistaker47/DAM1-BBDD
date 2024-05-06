@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 06-05-2024 a las 11:29:55
+-- Tiempo de generación: 06-05-2024 a las 11:58:30
 -- Versión del servidor: 10.4.11-MariaDB
 -- Versión de PHP: 7.4.2
 
@@ -48,10 +48,10 @@ SELECT * FROM anuncios WHERE anun_id = _id$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deportes_eliminar` (IN `_id` INT)  DELETE FROM deportes WHERE dte_id = _id$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `deportes_Insertar` (IN `_nombre` VARCHAR(50), IN `_baja` DATE)  NO SQL
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deportes_Insertar` (IN `_nombre` VARCHAR(50), IN `_alta` DATE, IN `_baja` DATE)  NO SQL
     COMMENT 'Función para insertar deportes'
 INSERT INTO deportes VALUES
-(null, _nombre, CURRENT_TIMESTAMP, _baja)$$
+(null, _nombre, _alta, _baja)$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deportes_modificar` (IN `_nombre` VARCHAR(50), IN `_fecha_alta` DATE, IN `_fecha_baja` DATE, IN `_id` INT)  NO SQL
     COMMENT 'Función para modificar deportes'
@@ -114,7 +114,9 @@ INSERT INTO `anuncios` (`anun_id`, `anun_texto`, `anun_fecha_alta`, `anun_fecha_
 (4, 'El próximo día <b>2024-05-02</b> comenzará un curso de <b>bbbbbbbbbbbbb</b>.<br>Apúntate!!!', '2024-05-02', '2024-06-19'),
 (8, 'El próximo día <b>2024-05-02</b> comenzará un curso de <b>sdfsdsdf</b>', '2024-05-02', '0000-00-00'),
 (9, 'El próximo día <b>2024-05-02</b> comenzará un curso de <b>sgsgg</b> y finalizará el día <b>2024-10-01</b>', '2024-05-02', '2024-10-01'),
-(13, 'El día 2024-05-04 comienza un curso de -trig-.<br>Termina el día 2050-12-31.<br><br>¡¡ Apúntate !!', '2050-12-31', '2024-05-04');
+(13, 'El día 2024-05-04 comienza un curso de -trig-.<br>Termina el día 2050-12-31.<br><br>¡¡ Apúntate !!', '2050-12-31', '2024-05-04'),
+(15, 'El próximo día <b>2024-05-06</b> comenzará un curso de <b> BABABABA</b>.<br>Apúntate!!!', '2024-05-06', '2024-07-11'),
+(16, 'El próximo día <b>2024-05-08</b> comenzará un curso de <b> BADMINTON</b>.<br>Apúntate!!!', '2024-05-08', '2024-05-31');
 
 -- --------------------------------------------------------
 
@@ -152,7 +154,18 @@ INSERT INTO `deportes` (`dte_id`, `dte_nombre`, `dte_fecha_alta`, `dte_fecha_baj
 (24, 'hockey', '2024-05-02', NULL),
 (25, 'pingpong', '2024-05-02', '2024-05-23'),
 (26, 'Motos', '2024-05-03', NULL),
-(32, 'trig', '2024-05-04', '2050-12-31');
+(32, 'trig', '2024-05-04', '2050-12-31'),
+(42, 'BABABABA', '2024-05-06', '2024-07-11'),
+(43, 'BADMINTON', '2024-05-08', '2024-05-31');
+
+--
+-- Disparadores `deportes`
+--
+DELIMITER $$
+CREATE TRIGGER `anunciosAfterInsert` AFTER INSERT ON `deportes` FOR EACH ROW INSERT INTO anuncios VALUES
+(null, CONCAT("El próximo día <b>", NEW.dte_fecha_alta, "</b> comenzará un curso de <b> ", NEW.dte_nombre, "</b>.<br>Apúntate!!!"), NEW.dte_fecha_alta, NEW.dte_fecha_baja)
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -270,13 +283,13 @@ ALTER TABLE `facturacion`
 -- AUTO_INCREMENT de la tabla `anuncios`
 --
 ALTER TABLE `anuncios`
-  MODIFY `anun_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `anun_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `deportes`
 --
 ALTER TABLE `deportes`
-  MODIFY `dte_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `dte_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT de la tabla `deportistas`
