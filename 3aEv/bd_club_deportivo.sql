@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 06-05-2024 a las 11:58:30
+-- Tiempo de generación: 06-05-2024 a las 14:10:06
 -- Versión del servidor: 10.4.11-MariaDB
 -- Versión de PHP: 7.4.2
 
@@ -50,8 +50,12 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `deportes_eliminar` (IN `_id` INT)  
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deportes_Insertar` (IN `_nombre` VARCHAR(50), IN `_alta` DATE, IN `_baja` DATE)  NO SQL
     COMMENT 'Función para insertar deportes'
+BEGIN
 INSERT INTO deportes VALUES
-(null, _nombre, _alta, _baja)$$
+(null, _nombre, _alta, _baja );
+
+SELECT ROW_COUNT() AS "filas insertadas";
+END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deportes_modificar` (IN `_nombre` VARCHAR(50), IN `_fecha_alta` DATE, IN `_fecha_baja` DATE, IN `_id` INT)  NO SQL
     COMMENT 'Función para modificar deportes'
@@ -70,8 +74,12 @@ SELECT * FROM deportes WHERE dte_id = _id ORDER BY dte_nombre$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deportistas_eliminar` (IN `_id` INT(50))  DELETE FROM deportistas WHERE dta_id = _id$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `deportistas_Insertar` (IN `_nombre` VARCHAR(50), IN `_password` VARCHAR(50), IN `_telefono` VARCHAR(50), IN `_alta` DATE, IN `_baja` DATE, IN `_admin` BOOLEAN)  INSERT INTO deportistas VALUES
-	(null, _nombre, md5(_password), _telefono ,_alta,_baja,_admin)$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deportistas_Insertar` (IN `_nombre` VARCHAR(50), IN `_password` VARCHAR(50), IN `_telefono` VARCHAR(50), IN `_alta` DATE, IN `_baja` DATE, IN `_admin` BOOLEAN)  if _baja = '0000:00:00' then
+INSERT INTO deportistas VALUES
+	(null, _nombre, md5(_password),  _telefono,_alta,null,_admin);
+end if$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deportistas_login` (IN `_nombre` INT, IN `_password` INT)  SELECT * FROM deportistas WHERE dta_nombre = _nombre AND dta_password = md5(_password)$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deportistas_modificar` (IN `_nombre` VARCHAR(50), IN `_password` VARCHAR(50), IN `_telefono` VARCHAR(50), IN `_alta` DATE, IN `_baja` DATE, IN `_admin` BOOLEAN, IN `_id` INT)  UPDATE deportistas SET
 	dta_nombre = _nombre,
@@ -116,7 +124,17 @@ INSERT INTO `anuncios` (`anun_id`, `anun_texto`, `anun_fecha_alta`, `anun_fecha_
 (9, 'El próximo día <b>2024-05-02</b> comenzará un curso de <b>sgsgg</b> y finalizará el día <b>2024-10-01</b>', '2024-05-02', '2024-10-01'),
 (13, 'El día 2024-05-04 comienza un curso de -trig-.<br>Termina el día 2050-12-31.<br><br>¡¡ Apúntate !!', '2050-12-31', '2024-05-04'),
 (15, 'El próximo día <b>2024-05-06</b> comenzará un curso de <b> BABABABA</b>.<br>Apúntate!!!', '2024-05-06', '2024-07-11'),
-(16, 'El próximo día <b>2024-05-08</b> comenzará un curso de <b> BADMINTON</b>.<br>Apúntate!!!', '2024-05-08', '2024-05-31');
+(16, 'El próximo día <b>2024-05-08</b> comenzará un curso de <b> BADMINTON</b>.<br>Apúntate!!!', '2024-05-08', '2024-05-31'),
+(17, 'El próximo día <b>2024-05-01</b> comenzará un curso de <b> AAAAAAA</b>.<br>Apúntate!!!', '2024-05-01', '2024-05-12'),
+(18, 'El próximo día <b>2024-05-08</b> comenzará un curso de <b> BADMINTON</b>.<br>Apúntate!!!', '2024-05-08', '0000-00-00'),
+(19, 'El próximo día <b>2024-05-08</b> comenzará un curso de <b> BADMINTON</b>.<br>Apúntate!!!', '2024-05-08', NULL),
+(20, 'El próximo día <b>2024-05-15</b> Hasta el día <b>2024-05-30 </b> comenzará un curso de <b> PELOTA VASCA</b>.<br>Apúntate!!!', '2024-05-15', '2024-05-30'),
+(21, 'El próximo día <b>2024-05-02</b> Hasta el día <b>2024-05-22 </b> comenzará un curso de <b> BOXEO</b>.<br>Apúntate!!!', '2024-05-02', '2024-05-22'),
+(22, 'El próximo día <b>2024-02-22</b> Hasta el día <b>2024-09-12 </b> comenzará un curso de <b> MAMAAA</b>.<br>Apúntate!!!', '2024-02-22', '2024-09-12'),
+(23, 'El próximo día <b>2024-04-29</b> Hasta el día <b>2024-05-03 </b> comenzará un curso de <b> pruebaaaaa</b>.<br>Apúntate!!!', '2024-04-29', '2024-05-03'),
+(24, 'El próximo día <b>2024-02-22</b> Hasta el día <b>2022-11-01 </b> comenzará un curso de <b> BOXEO</b>.<br>Apúntate!!!', '2024-02-22', '2022-11-01'),
+(25, 'El próximo día <b>2024-05-16</b> Hasta el día <b>2024-05-26 </b> comenzará un curso de <b> BADMINTON</b>.<br>Apúntate!!!', '2024-05-16', '2024-05-26'),
+(26, 'El próximo día <b>2024-02-22</b> Hasta el día <b>2024-09-12 </b> comenzará un curso de <b> a</b>.<br>Apúntate!!!', '2024-02-22', '2024-09-12');
 
 -- --------------------------------------------------------
 
@@ -155,15 +173,21 @@ INSERT INTO `deportes` (`dte_id`, `dte_nombre`, `dte_fecha_alta`, `dte_fecha_baj
 (25, 'pingpong', '2024-05-02', '2024-05-23'),
 (26, 'Motos', '2024-05-03', NULL),
 (32, 'trig', '2024-05-04', '2050-12-31'),
-(42, 'BABABABA', '2024-05-06', '2024-07-11'),
-(43, 'BADMINTON', '2024-05-08', '2024-05-31');
+(49, 'MAMAAA', '2024-02-22', '2024-09-12'),
+(51, 'BOXEO', '2024-02-22', '2022-11-01'),
+(52, 'BADMINTON', '2024-05-16', '2024-05-26');
 
 --
 -- Disparadores `deportes`
 --
 DELIMITER $$
-CREATE TRIGGER `anunciosAfterInsert` AFTER INSERT ON `deportes` FOR EACH ROW INSERT INTO anuncios VALUES
-(null, CONCAT("El próximo día <b>", NEW.dte_fecha_alta, "</b> comenzará un curso de <b> ", NEW.dte_nombre, "</b>.<br>Apúntate!!!"), NEW.dte_fecha_alta, NEW.dte_fecha_baja)
+CREATE TRIGGER `anunciosAfterInsert` AFTER INSERT ON `deportes` FOR EACH ROW if (NEW.dte_fecha_baja is null) then
+INSERT INTO anuncios VALUES
+(null, CONCAT("El próximo día <b>", NEW.dte_fecha_alta, "</b> comenzará un curso de <b>", NEW.dte_nombre, "</b>.<br>Apúntate!!!"), NEW.dte_fecha_alta, NEW.dte_fecha_baja);
+else 
+INSERT INTO anuncios VALUES
+(null, CONCAT("El próximo día <b>", NEW.dte_fecha_alta, "</b> Hasta el día <b>", NEW.dte_fecha_baja ," </b> comenzará un curso de <b> ", NEW.dte_nombre, "</b>.<br>Apúntate!!!"), NEW.dte_fecha_alta, NEW.dte_fecha_baja);
+end if
 $$
 DELIMITER ;
 
@@ -224,7 +248,9 @@ INSERT INTO `deportistas` (`dta_id`, `dta_nombre`, `dta_password`, `dta_telefono
 (8, 'Sergio', 'dc1d67d1a5e9d52940945516548c8ec3', '', '2024-05-02', NULL, 0),
 (9, 'jdf', '1e0fc2a2b65e452f24c6f0c3447dbc95', '', '2024-05-02', NULL, 0),
 (10, 'lol', '9cdfb439c7876e703e307864c9167a15', '', '2024-05-02', NULL, 0),
-(12, 'xxxx', 'ea416ed0759d46a8de58f63a59077499', 'xxxx', NULL, NULL, 0);
+(12, 'xxxx', 'ea416ed0759d46a8de58f63a59077499', 'xxxx', NULL, NULL, 0),
+(15, 'David', '464e07afc9e46359fb480839150595c5', '661412330', '2024-02-22', NULL, 0),
+(16, 'prueba', '4124bc0a9335c27f086f24ba207a4912', '99999999', '2024-05-01', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -283,19 +309,19 @@ ALTER TABLE `facturacion`
 -- AUTO_INCREMENT de la tabla `anuncios`
 --
 ALTER TABLE `anuncios`
-  MODIFY `anun_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `anun_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT de la tabla `deportes`
 --
 ALTER TABLE `deportes`
-  MODIFY `dte_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `dte_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT de la tabla `deportistas`
 --
 ALTER TABLE `deportistas`
-  MODIFY `dta_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `dta_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- Restricciones para tablas volcadas
